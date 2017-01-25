@@ -289,7 +289,7 @@ task FormatCode {
                 Format-ScriptExpandStatementBlocks |
                 Format-ScriptPadOperators |
                 Format-ScriptPadExpressions |
-                Format-ScriptFormatTypeNames |
+                #Format-ScriptFormatTypeNames |
                 Format-ScriptReduceLineLength |
                 Format-ScriptRemoveSuperfluousSpaces |
                 Format-ScriptFormatCodeIndentation

@@ -87,7 +87,16 @@
             $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError) 
             $Blocks = $AST.FindAll($predicate, $true)
             $B = $Blocks[$t].Extent.Text
+
+            if($Blocks[$t].IsWorkflow){
+                $keyword = 'workflow'
+            }
+            else{
+                $keyword = 'function'
+            }
+
             $Params = ''
+
 
             if (($Blocks[$t].Parameters).Count -gt 0) {
                 $Params = ' (' + (($Blocks[$t].Parameters).Name.Extent.Text -join ', ') + ')'
@@ -98,10 +107,10 @@
             $RemoveStart = $Blocks[$t].Extent.StartOffset
             $RemoveEnd = $Blocks[$t].Extent.EndOffset - $RemoveStart
             if (($codelinecount -le 1) -and $DontExpandSingleLineBlocks) {
-                $NewExtent = 'Function ' + [string]($Blocks[$t].Name) + $Params + "`r`n{ " + $InnerBlock + " }"
+                $NewExtent = "$keyword " + [string]($Blocks[$t].Name) + $Params + "`r`n{ " + $InnerBlock + " }"
             }
             else {
-                $NewExtent = 'Function ' + [string]($Blocks[$t].Name) + $Params + "`r`n{`r`n" + $InnerBlock + "`r`n}"
+                $NewExtent = "$keyword " + [string]($Blocks[$t].Name) + $Params + "`r`n{`r`n" + $InnerBlock + "`r`n}"
             }
             $ScriptText = $ScriptText.Remove($RemoveStart,$RemoveEnd).Insert($RemoveStart,$NewExtent)
             Write-Verbose "$($FunctionName): Processing function $($Blocks[$t].Name)"
