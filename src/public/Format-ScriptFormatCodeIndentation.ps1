@@ -74,7 +74,8 @@
             $Token = $Tokens[$t]
             $NextToken = $Tokens[$t-1]
 
-            if ($token.Kind -match '(L|At)Curly') { 
+            if ($token.Kind -match '^(Dollar|L|At)(Curly|Paren|Bracket)$') { 
+
                 $CurrentLevel-- 
             }  
 
@@ -86,7 +87,7 @@
                 $ScriptText = $ScriptText.Remove($RemoveStart,$RemoveEnd).Insert($RemoveStart,$IndentText)
             }
 
-            if ($token.Kind -eq 'RCurly') {
+            if ($token.Kind -match '^R(Curly|Paren|Bracket)$') {
                 $CurrentLevel++ 
             }
         }
